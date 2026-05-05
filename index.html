@@ -516,7 +516,7 @@
       診断結果の詳細解説と、あなたのタイプに合わせた<br>
       具体的なアドバイスをメールでお届けします。
     </div>
-    <form action="https://app.us12.list-manage.com/subscribe/post?u=a0dca9ba6eadd341541fd8224&amp;id=fd40bda9a0&amp;f_id=009d9ce0f0" method="post" target="_blank" onsubmit="handleMailchimp(event)">
+    <form id="mc-form" onsubmit="handleMailchimp(event)">
       <input class="cta-input" type="email" name="EMAIL" id="email-input" placeholder="メールアドレスを入力" required>
       <div aria-hidden="true" style="position:absolute;left:-5000px;">
         <input type="text" name="b_a0dca9ba6eadd341541fd8224_fd40bda9a0" tabindex="-1" value="">
@@ -711,20 +711,24 @@ function drawRadar() {
 }
 
 function handleMailchimp(e) {
+  e.preventDefault();
   const email = document.getElementById('email-input').value.trim();
   if (!email || !email.includes('@')) {
-    e.preventDefault();
     alert('正しいメールアドレスを入力してください');
     return;
   }
-  const form = e.target;
-  form.querySelector('.cta-input').style.display = 'none';
-  form.querySelector('.cta-btn').style.display = 'none';
-  document.querySelector('.cta-small').style.display = 'none';
-  const ok = document.createElement('div');
-  ok.style.cssText = 'color:white;font-family:sans-serif;font-size:14px;line-height:2;margin-top:8px;';
-  ok.innerHTML = '✓ ご登録ありがとうございます<br><span style="opacity:.7;font-size:12px;">まもなくメールをお送りします</span>';
-  document.querySelector('.cta-box').appendChild(ok);
+  const url = 'https://app.us12.list-manage.com/subscribe/post-json?u=a0dca9ba6eadd341541fd8224&id=fd40bda9a0&f_id=009d9ce0f0&EMAIL=' + encodeURIComponent(email) + '&c=mcCallback';
+  window.mcCallback = function(data) {
+    document.getElementById('mc-form').style.display = 'none';
+    document.querySelector('.cta-small').style.display = 'none';
+    const ok = document.createElement('div');
+    ok.style.cssText = 'color:white;font-family:sans-serif;font-size:14px;line-height:2;margin-top:8px;';
+    ok.innerHTML = '✓ ご登録ありがとうございます<br><span style="opacity:.7;font-size:12px;">まもなくメールをお送りします</span>';
+    document.querySelector('.cta-box').appendChild(ok);
+  };
+  const s = document.createElement('script');
+  s.src = url;
+  document.body.appendChild(s);
 }
 
 function showScreen(id) {
