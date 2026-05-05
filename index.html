@@ -516,10 +516,13 @@
       診断結果の詳細解説と、あなたのタイプに合わせた<br>
       具体的なアドバイスをメールでお届けします。
     </div>
-    <!-- ↓↓↓ ここをMailchimpの埋め込みコードに差し替えてください ↓↓↓ -->
-    <input class="cta-input" type="email" id="email-input" placeholder="メールアドレスを入力">
-    <button class="cta-btn" onclick="submitEmail()">無料でアドバイスを受け取る</button>
-    <!-- ↑↑↑ ここまで ↑↑↑ -->
+    <form action="https://app.us12.list-manage.com/subscribe/post?u=a0dca9ba6eadd341541fd8224&amp;id=fd40bda9a0&amp;f_id=009d9ce0f0" method="post" target="_blank" onsubmit="handleMailchimp(event)">
+      <input class="cta-input" type="email" name="EMAIL" id="email-input" placeholder="メールアドレスを入力" required>
+      <div aria-hidden="true" style="position:absolute;left:-5000px;">
+        <input type="text" name="b_a0dca9ba6eadd341541fd8224_fd40bda9a0" tabindex="-1" value="">
+      </div>
+      <button type="submit" class="cta-btn">無料でアドバイスを受け取る</button>
+    </form>
     <p class="cta-small">※ いつでも配信解除できます</p>
   </div>
 
@@ -707,18 +710,19 @@ function drawRadar() {
   });
 }
 
-function submitEmail() {
+function handleMailchimp(e) {
   const email = document.getElementById('email-input').value.trim();
   if (!email || !email.includes('@')) {
+    e.preventDefault();
     alert('正しいメールアドレスを入力してください');
     return;
   }
-  /* ── ここにMailchimpのAPI送信処理を追加 ── */
-  document.querySelector('.cta-input').style.display = 'none';
-  document.querySelector('.cta-btn').style.display = 'none';
+  const form = e.target;
+  form.querySelector('.cta-input').style.display = 'none';
+  form.querySelector('.cta-btn').style.display = 'none';
   document.querySelector('.cta-small').style.display = 'none';
   const ok = document.createElement('div');
-  ok.style.cssText = 'color:white;font-family:sans-serif;font-size:14px;line-height:2;';
+  ok.style.cssText = 'color:white;font-family:sans-serif;font-size:14px;line-height:2;margin-top:8px;';
   ok.innerHTML = '✓ ご登録ありがとうございます<br><span style="opacity:.7;font-size:12px;">まもなくメールをお送りします</span>';
   document.querySelector('.cta-box').appendChild(ok);
 }
